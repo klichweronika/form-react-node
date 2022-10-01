@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Box, Button, TextField } from "@material-ui/core";
+import { Box, Button } from "@material-ui/core";
 import { useForm } from "react-hook-form";
-import "./styles.css";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import TextField from "@mui/material/TextField";
 import { Dayjs } from "dayjs";
-import DateSelector from "./DateSelector";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 export default function Form() {
   const { register, handleSubmit, errors } = useForm();
@@ -84,26 +85,30 @@ export default function Form() {
           </Box>
         </Box>
 
-        <Box my={3}>
-          <DatePicker
-            label="Select date"
-            onChange={() => console.log("dupa")}
-            value={"x"}
-            renderInput={(params) => <TextField {...params} />}
-          />
-          <Box>
-            {errors.email && errors.email.type === "required" && (
-              <span className="error-message">This is required field</span>
-            )}
-            {errors.email && errors.email.type === "pattern" && (
-              <span className="error-message">Enter a valid email</span>
-            )}
-          </Box>
+        <Box sx={{ width: "87%" }} my={3}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              label="Type a date"
+              value={date}
+              onChange={(newValue: Dayjs | null) => {
+                setDate(newValue);
+              }}
+              inputRef={register({
+                required: true,
+              })}
+              renderInput={(params) => <TextField {...params} required />}
+            />
+            <Box>
+              {errors.name && errors.name.type === "required" && (
+                <span className="error-message">This is required field</span>
+              )}
+            </Box>
+          </LocalizationProvider>
         </Box>
 
-        <Box my={3}>
+        {/* <Box my={3}>
           <DateSelector setDate={setDate} date={date} />
-        </Box>
+        </Box> */}
 
         <Button
           color="primary"
