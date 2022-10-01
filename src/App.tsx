@@ -1,12 +1,11 @@
 import React from "react";
-import "./App.css";
+import "./styles.css";
+import Form from "./components/Form";
 
-function App() {
+export default function App() {
   return (
     <div className="App">
-      <header className="App-header"></header>
+      <Form />
     </div>
   );
 }
-
-export default App;
