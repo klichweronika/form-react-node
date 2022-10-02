@@ -5,13 +5,14 @@
   "dependencies": {
     "@emotion/react": "11.1.5",
     "@emotion/styled": "11.1.5",
-    "@mui/material": "^5.10.6",
     "@material-ui/core": "5.0.0-alpha.24",
     "@mui/lab": "^5.0.0-alpha.101",
+    "@mui/material": "^5.10.6",
     "@mui/x-date-pickers": "^5.0.3",
     "axios": "^0.27.2",
     "date-fns": "2.17.0",
     "dayjs": "^1.11.5",
+    "dotenv": "^16.0.3",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -24,8 +25,9 @@
     "typescript": "^4.8.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start-windows": "powershell.exe Remove-Item tsconfig.json && react-scripts start",
+    "start": "rm -rf tsconfig.json && react-scripts --openssl-legacy-provider start",
+    "build": "rm -rf tsconfig.json && react-scripts --openssl-legacy-provider build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

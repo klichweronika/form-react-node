@@ -1,46 +1,33 @@
-# Getting Started with Create React App
+# Simple user form
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The app is made of two parts:
 
-## Available Scripts
+- front-end written in React that presents a form with four fields. The form is built with react-hook-form. It uses the api-client library that was generated with open api schema generator.
+  As this is just a recruitment task there is no automation around this process. It was done manually once and used api schema is saved as 'events-api.schema.json' in the back-end directory.
 
-In the project directory, you can run:
+- back-end written with nest-js that uses mongoose ORM to connect to mongodb instance. It validates the model using idomatic nestjs validation pipe.
 
-### `npm start`
+Both projects has configuration injected via environment variables. They are coming with Dockerfiles that are build just on one layer (so the images are quite big).
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Build and run the projects
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+To run the project install [docker](link-to-docker).
 
-### `npm test`
+1. Open command line in the root directory `event-form`.
+2. Run the command `docker-compose up`.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+> It will run
+>
+> - mongodb document database on `localhost:27017`
+> - mongo-express database client on `localhost:3050`
+> - front-end on `localhost:3051`
+> - back-end on `localhost:3052`
 
-### `npm run build`
+To access the swagger of the back-end and see available endpoints go to `localhost:3052/api`.
+To check if the submitted form is saving data correctly go to `localhost:3050` and then look at `test` database. It should contain `evententities` collection.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Scope
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+I've decided not to write any tests for this task.
+The reason for that is I've spent a lot of time learning how to create a back-end and I didn't have enough time.
+Also, there is only validation logic, so all test I would've write would be integration tests which are costly to create. (There is barely any logic I could test with unit testing)

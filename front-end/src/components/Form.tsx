@@ -6,13 +6,36 @@ import { Dayjs } from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { Event } from "../api";
+import { useCreateEvent } from "./useCreateEvent";
 
 export default function Form() {
-  const { register, handleSubmit, errors } = useForm();
+  const { register, handleSubmit, errors, reset } = useForm();
   const [date, setDate] = useState<Dayjs | null>(null);
+  const createEvent = useCreateEvent();
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const onSubmit = async (data: Event) => {
+    try {
+      const event = {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        eventDate: new Date(data.eventDate).toISOString(),
+      };
+
+      const response = await createEvent(event);
+
+      if (response.status === 201) {
+        reset();
+        setDate(null);
+        alert("Your event has been sucessfully saved.");
+        return;
+      }
+
+      alert(`Your request was not accepted, ${response.statusText}.`);
+    } catch (e) {
+      alert(`Sending your request failed with an error ${JSON.stringify(e)}`);
+    }
   };
 
   return (
@@ -21,7 +44,7 @@ export default function Form() {
         <Box mb={3}>
           <TextField
             label="Name"
-            name="name"
+            name="firstName"
             type="name"
             variant="outlined"
             className="input-field"
@@ -44,7 +67,7 @@ export default function Form() {
         <Box mb={3}>
           <TextField
             label="Subname"
-            name="subname"
+            name="lastName"
             type="subname"
             variant="outlined"
             className="input-field"
@@ -96,7 +119,9 @@ export default function Form() {
               inputRef={register({
                 required: true,
               })}
-              renderInput={(params) => <TextField {...params} required />}
+              renderInput={(params) => (
+                <TextField name="eventDate" {...params} required />
+              )}
             />
             <Box>
               {errors.name && errors.name.type === "required" && (
@@ -105,10 +130,6 @@ export default function Form() {
             </Box>
           </LocalizationProvider>
         </Box>
-
-        {/* <Box my={3}>
-          <DateSelector setDate={setDate} date={date} />
-        </Box> */}
 
         <Button
           color="primary"

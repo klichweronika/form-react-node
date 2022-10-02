@@ -1,0 +1,62 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/events": {
+      "post": {
+        "operationId": "EventsController_save",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Event" }
+            }
+          }
+        },
+        "responses": { "201": { "description": "" } }
+      }
+    }
+  },
+  "info": {
+    "title": "Events",
+    "description": "The events API description",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [{ "name": "events", "description": "" }],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": { "scheme": "bearer", "bearerFormat": "JWT", "type": "http" }
+    },
+    "schemas": {
+      "Event": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "example": "Weronika",
+            "description": "Name of the person that created an event."
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Klich",
+            "description": "Last name of the person that created an event."
+          },
+          "email": {
+            "type": "string",
+            "example": "test@example.com",
+            "description": "Email the person that created an event."
+          },
+          "eventDate": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2022-10-01T20:53:12.648Z",
+            "description": "Date when an event occured."
+          }
+        },
+        "required": ["firstName", "lastName", "email", "eventDate"]
+      }
+    }
+  }
+}

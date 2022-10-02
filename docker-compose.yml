@@ -1,0 +1,70 @@
+version: "3.8"
+
+services:
+  back-end:
+    build:
+      context: ./back-end
+      dockerfile: Dockerfile
+    depends_on:
+      - database
+      - database-client
+    ports:
+      - 3052:3052
+    environment:
+      EVENTS_MONGODB_CONNECTION: mongodb://root:example@database:27017/events
+      PORT: 3052
+    networks:
+      - back-end
+      - front-end
+
+  database:
+    image: mongo:6.0.2
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    networks:
+      - db
+      - back-end
+    ports:
+      - 27017:27017
+
+  database-client:
+    image: mongo-express:1.0.0-alpha
+    restart: always
+    ports:
+      - 3050:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_SERVER: database
+      ME_CONFIG_MONGODB_ENABLE_ADMIN: true
+    depends_on:
+      - database
+    networks:
+      - db
+
+  front-end:
+    ports:
+      - 3051:3000
+    depends_on:
+      - back-end
+    build:
+      context: ./front-end
+      dockerfile: Dockerfile
+    environment:
+      CHOKIDAR_USEPOLLING: true
+      REACT_APP_API_URL: http://localhost:3052
+    networks:
+      - front-end
+
+networks:
+  front-end:
+    name: front-end
+    driver: bridge
+  back-end:
+    name: back-end
+    driver: bridge
+  db:
+    name: db
+    driver: bridge
